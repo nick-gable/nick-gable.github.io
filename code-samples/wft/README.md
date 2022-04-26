@@ -1,0 +1,2 @@
+# WebSocket File Transfer
+This contains the complete code for the WebSocket File Transfer application, which allows one device to open itself to receiving files from another device, which can connect to the first device by a QR code or a text code entered on the site. `server.py` is the Python backend, which communicates via. WebSocket to both the client and the server (`send.html` and `recv.html` respectively). `index.html` is a simple home page that eases access for `send.html` and `recv.html`.

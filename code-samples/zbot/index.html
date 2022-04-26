@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link
+        href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900,900i&amp;display=swap"
+        rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+    <title>TTA Valuation Bot</title>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1>Zillow Bot Demo Interface</h1>
+
+        <div class="row">
+            <div class="col-md">
+                <div class="card">
+                    <div class="card-header">Upload Spreadsheet(s)</div>
+                    <div class="card-body">
+                        <form id="fileform">
+                            <input type="file" id="file-upload" name="spreadsheets" multiple>
+                        </form>
+                        <button class="btn btn-primary mt-3" id="upload">Upload File(s)</button>
+                    </div>
+                </div>
+                <ul class="list-group mt-3" id="spreadsheets">
+        
+                </ul>
+                <a href="/api/auth/logout" class="btn btn-primary mt-3 mb-3">Logout</a>
+                <!-- Templates for status items -->
+                <li class="list-group-item" id="template-incomplete" hidden>
+                    <b>Name: </b> {F}.xlsx<br />
+                    <div class="progress bg-dark" style="height: 17px">
+                        <div class="progress-bar" style="width: 0%">{C} / {T} properties searched</div>
+                    </div>
+                </li>
+                <li class="list-group-item" id="template-complete" hidden>
+                    <b>Name: </b> {F}.xlsx<br />
+                    <div class="progress bg-dark" style="height: 17px">
+                        <div class="progress-bar bg-success" style="width: 100%">{T} / {T} properties searched</div>
+                    </div>
+        
+                    <a class="btn btn-success mt-2 mr-2" href="/api/zbot/download?filename=">Download File</a>
+                    <img src="/images/Zillow_Wordmark_Blue_RGB lrg.png" alt="Real Estate on Zillow" style="height: 20px"
+                        class="mt-2" />
+                </li>
+            </div>
+            <div class="col-md mb-5">
+                <ul class="nav nav-tabs mb-2">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" id="instructions-link"
+                            onclick="tabulate('instructions')">Instructions and Notes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="tabulate('zillow-disclaimer')" id="zillow-disclaimer-link">Zillow
+                            Data Disclaimer</a>
+                    </li>
+        
+                </ul>
+                <div id="instructions" class="tabs">
+                    <ul>
+                        <li>Use the Upload Spreadsheets dialog to upload as many spreadsheets as you wish. Please upload only
+                            XLSX
+                            files, and <b>avoid uploading multiple files of the same name at the same time, as the bot may
+                                confuse
+                                them for the same file.</b></li>
+                        <li>The spreadsheets uploaded may include any data you wish, but the bot is currently set to look for
+                            headers in the <b>2nd row</b> of the spreadsheet, as per the format of the Loan Tape Template.</li>
+                        <li>Columns do not need to be in any particular order - the bot will know what to look for and will find
+                            the
+                            address information no matter the format or arrangement of the columns.</li>
+                        <li>On the completed spreadsheets, an "X" means that Zillow did not have a Zestimate on file for the
+                            property in question, while a "?" means that the bot could not find the properties record at all. In
+                            the 2nd case, this could mean that Zillow simply does not have any record of the property, or that
+                            there were serious spelling or formatting mistakes in the input address.</li>
+                        <li>Completed spreadsheets will have the new data added to the first empty columns on the right side of
+                            the document.</li>
+                    </ul>
+                </div>
+                <div id="zillow-disclaimer" class="tabs" style="display: none">
+                    <p>
+                        Because the data that we use is subject to the terms and conditions of the Zillow API, here are a few
+                        things
+                        you should know:
+                    </p>
+                    <ul>
+                        <li>Zillow prohibits this site from storing data that came from its API in our databases. As a result,
+                            all
+                            data taken from Zillow will be deleted from the server once you download it.</li>
+                        <li>Per the branding terms, a column will be added to the spreadsheet that has links to all of the
+                            properties pages on Zillow. Although this is required from our site, you are free to remove it as
+                            you
+                            wish.</li>
+                        <li>Zillow is unclear as to if there is a limit of 1000 API calls per day (according to the API
+                            website), or
+                            5000 per hour (as stated in the terms). Regardless, if there appear to be a lot of errors in any of
+                            the
+                            returned spreadsheets, it is most likely due to the call limit being reached.</li>
+                    </ul>
+        
+                </div>
+                Zestimate Data © Zillow, Inc., 2006-2019. Use is subject to Terms of Use.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

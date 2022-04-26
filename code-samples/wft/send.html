@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900,900i&amp;display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>WFT File Sender</title>
+</head>
+<body class="bg-light">
+<div class="container mt-5">
+    <div class="row">
+        <h1 class="d-xl-none">WebSocket File Transfer</h1>
+        <div class="col-lg">
+            <div class="card bg-warning" id="connection-card">
+                <div class="card-header" id="connection-header">
+                    Connecting...
+                </div>
+                <div class="card-body" id="connection-body">
+                    Attempting to connect to the file transfer server...
+                </div>
+            </div>
+            <div class="card bg-light text-dark mt-3" id="uploader" hidden>
+                <div class="card-header">
+                    Upload Files
+                </div>
+                <div class="card-body">
+                    <input type="file" class="" id="file-upload" multiple/><br/>
+                    <button class="btn btn-primary mt-3" id="upload-button">Send Files</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg" id="right">
+            <h1 class="text-right d-none d-xl-block">WebSocket File Transfer</h1>
+            <div class="card bg-primary text-light mt-3" id="transfer-progress" hidden="true">
+                <div class="card-header">
+                    Preparing files for transfer...
+                </div>
+                <div class="card-body">
+                    <p id="transfer-data">
+                        <b>File Name: </b><span id="t-file-name">Test.png</span><br/>
+                    </p>
+                    <div class="progress">
+                        <div class="progress-bar bg-dark" style="width: 40%" id="progress-bar"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card bg-primary text-light mt-3" id="data-progress" hidden>
+                <div class="card-header">
+                    Data transfer in progress...
+                </div>
+                <div class="card-body">
+                    <p>Some file data is still waiting to be sent to the server. Please keep your browser open until
+                        this dialog disappears.</p>
+                    <div class="progress">
+                        <div class="progress-bar bg-dark" style="width:40%" id="data-progress-bar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const socket = new WebSocket('ws://localhost:8765');
+
+    let connectionCard = document.getElementById("connection-card");
+    let connectionHeader = document.getElementById("connection-header");
+    let connectionBody = document.getElementById("connection-body");
+
+    socket.addEventListener('open', function (event) {
+        socket.send("send " + findGetParameter("code"));
+    });
+
+    socket.addEventListener('message', function (event) {
+        console.log(event.data);
+        switch (event.data) {
+            case "confirm_send":
+                connectionCard.className = "card bg-success text-white";
+                connectionHeader.innerHTML = "Ready to send files";
+                connectionBody.innerHTML = "Connection complete. You are now able to send files to the receiver with the specified code. Successfully transferred files will appear on the right.";
+                document.getElementById("uploader").hidden = false;
+                break;
+
+            case "invalid_code":
+                connectionCard.className = "card bg-danger text-white";
+                connectionHeader.innerHTML = "Connection failed";
+                connectionBody.innerHTML = "The code specified was invalid. If entered by hand, check your spelling; otherwise, confirm that the receiver is still up, and that they sent you the correct link / showed you the correct QR code.";
+                break;
+        }
+        if (event.data.toString().includes("recv_success")) {
+            let fileName = event.data.replace("recv_success ", "");
+            let successAlert = document.createElement("div");
+            successAlert.className = "alert alert-success mt-3";
+            successAlert.innerHTML = "File " + fileName + " has been received";
+            document.getElementById("right").appendChild(successAlert);
+        }
+    });
+
+    document.getElementById("upload-button").onclick = function () {
+        let files = document.getElementById("file-upload").files;
+        for (let i = 0; i < files.length; i++) {
+            sendFile(files[i]);
+        }
+    }
+
+    // file parameter will be passed from an input
+    function sendFile(file) {
+        socket.send("new_file " + file.name);
+        let chunks = [];
+        let chunkSize = 1048570;
+        let chunkNumber = Math.floor((file.size / chunkSize) + 1);
+
+        let transferAlert = document.getElementById("transfer-progress");
+        transferAlert.hidden = false;
+        let fileName = document.getElementById("t-file-name");
+        fileName.innerHTML = file.name;
+        let progressBar = document.getElementById("progress-bar");
+        progressBar.style.width = "0%";
+
+        let index = 0;
+        for (let i = 0; i < chunkNumber; i++) {
+            let byteEnd = Math.ceil((file.size / chunkNumber) * (i + 1));
+            chunks.push(file.slice(index, byteEnd));
+            index += (byteEnd - index);
+        }
+        socket.send("num_chunks " + chunks.length.toString());
+        console.log("Split");
+        for (let i = 0; i < chunks.length; i++) {
+            socket.send(chunks[i]);
+            let percentage = ((i + 1) / chunks.length) * 100;
+            progressBar.style.width = percentage + "%";
+        }
+        console.log("sent");
+        console.log(chunks);
+        socket.send("end_file");
+        transferAlert.hidden = true;
+
+        let successAlert = document.createElement("div");
+        successAlert.className = "alert alert-info mt-3";
+        successAlert.innerHTML = "File " + file.name + " added to queue";
+        document.getElementById("right").appendChild(successAlert);
+
+    }
+
+    function findGetParameter(parameterName) {
+        let result = null,
+            tmp = [];
+        location.search
+            .substr(1)
+            .split("&")
+            .forEach(function (item) {
+                tmp = item.split("=");
+                if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+            });
+        return result;
+    }
+
+    let maxBuffered = 0;
+    setInterval(function () {
+        let dialog = document.getElementById("data-progress");
+        let progressBar = document.getElementById("data-progress-bar");
+
+        if (socket.bufferedAmount != 0) {
+            dialog.hidden = false;
+            if (socket.bufferedAmount > maxBuffered) {
+                maxBuffered = socket.bufferedAmount;
+                progressBar.style.width = "0%";
+            } else {
+                let percentage = ((maxBuffered - socket.bufferedAmount) / maxBuffered) * 100;
+                progressBar.style.width = percentage + "%";
+            }
+        } else {
+            dialog.hidden = true;
+            progressBar.style.width = "0%";
+        }
+    }, 1000);
+</script>
+</body>
+</html>

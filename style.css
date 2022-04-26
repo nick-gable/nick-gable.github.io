@@ -1,0 +1,28 @@
+.bg-main {
+    /*background-color: #992164;*/
+    background-color: #4c247e;
+    /*background-color: #3700B3;*/
+}
+
+.bg-tile {
+    /*background-color: #d62a71;*/
+    background-color: #783199;
+    border-radius: 15px;
+    /*background-color: #6200EE;*/
+}
+
+a:not(.btn), a:hover:not(.btn) {
+    color: white;
+    text-decoration: underline;
+    text-decoration-color: white;
+}
+
+h1,h2,h3,h4,h5,p,div {
+    color: white;
+}
+
+
+.half-lead {
+    font-size: 13pt;
+    font-weight: 200;
+}

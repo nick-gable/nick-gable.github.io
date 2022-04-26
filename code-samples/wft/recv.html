@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900,900i&amp;display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>WFT File Receiver</title>
+</head>
+<body class="bg-light">
+<div class="container mt-5">
+    <h1 class="d-xl-none">WebSocket File Transfer</h1>
+    <div class="row">
+        <div class="col-lg">
+            <div class="card bg-warning" id="connection-card">
+                <div class="card-header" id="connection-header">
+                    Connecting...
+                </div>
+                <div class="card-body" id="connection-body">
+                    Attempting to connect to server...
+                </div>
+            </div>
+            <br/>
+        </div>
+        <div class="col-lg" id="right">
+            <h1 class="text-right d-none d-xl-block">WebSocket File Transfer</h1>
+            <div class="card bg-primary text-light mt-3" id="transfer-progress" hidden>
+                <div class="card-header">
+                    Incoming File Transfer in Progress...
+                </div>
+                <div class="card-body">
+                    <p id="transfer-data">
+                        <b>File Name: </b><span id="t-file-name">Test.png</span><br />
+                    </p>
+                    <div class="progress">
+                        <div class="progress-bar bg-dark" style="width: 40%" id="progress-bar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="res/qrcode.min.js"></script>
+<script>
+    const socket = new WebSocket('ws://localhost:8765');
+
+    let saving = false;
+    let chunks = [];
+    let chunkCount = 0;
+    let currentChunk = 0;
+    let fileName = "";
+
+    let connectionCard = document.getElementById("connection-card");
+    let connectionBody = document.getElementById("connection-body");
+    let connectionHeader = document.getElementById("connection-header");
+
+    let transferProgress = document.getElementById("transfer-progress");
+
+    let right = document.getElementById("right");
+
+    socket.addEventListener('open', function (event) {
+        socket.send("recv");
+        connectionCard.className = "card bg-success text-light";
+        connectionBody.innerHTML = "Connected! Waiting for server to give code...";
+    });
+
+    socket.addEventListener('message', function (event) {
+        console.log(event.data);
+        if (saving) {  // Handler loop for file transfers
+            if (event.data === "end_file") {
+                saving = false;
+                let file = new File(chunks, fileName);
+                console.log(chunks);
+                console.log(file);
+
+                transferProgress.hidden = true;
+
+                let completeDiv = document.createElement("div");
+                completeDiv.className = "card bg-success text-light mt-3";
+
+                let completeDivHeader = document.createElement("div");
+                completeDivHeader.className = "card-header";
+                completeDivHeader.innerHTML = fileName; // TODO get file size here
+                completeDiv.appendChild(completeDivHeader);
+
+                let completeDivBody = document.createElement("div");
+                completeDivBody.className = "card-body";
+                completeDiv.appendChild(completeDivBody);
+
+                let downloadLink = document.createElement("a");
+                downloadLink.href = window.URL.createObjectURL(file); // TODO mime data (soon of course)
+                downloadLink.download = fileName;
+                downloadLink.className = "btn btn-light text-dark";
+                downloadLink.innerHTML = "Download File";
+                completeDivBody.appendChild(downloadLink);
+
+                right.appendChild(completeDiv);
+                socket.send("recv_success " + fileName);
+
+                fileName = "";
+                chunks = [];
+                chunkCount = 0;
+                currentChunk = 0;
+            }
+            else if(event.data.toString().includes("num_chunks")){
+                chunkCount = event.data.replace("num_chunks ", "");
+            } else {
+                chunks.push(event.data);
+                currentChunk++;
+                let percent = (currentChunk / chunkCount) * 100;
+                document.getElementById("progress-bar").style.width = percent + "%";
+            }
+        } else {  // For when file transfers are not in progress
+            if (event.data.toString().includes("confirm_recv")) {
+                connectionHeader.innerHTML = "Ready to receive files";
+                let code = event.data.replace("confirm_recv ", "");
+                let urlString = "https://techtideapps.com/wft/send.html?code=" + code;
+                let qrDiv = document.createElement("DIV");
+                connectionBody.innerHTML = "<h3>" + code + "</h3>";
+                connectionBody.appendChild(qrDiv);
+                new QRCode(qrDiv, urlString);
+
+                let urlInput = document.createElement("input");
+                urlInput.type = "text";
+                urlInput.className = "form-control mt-3";
+                urlInput.readOnly = true;
+                urlInput.value = urlString;
+                connectionBody.appendChild(urlInput);
+
+                let p = document.createElement("p");
+                p.className = "lead mt-3";
+                p.innerHTML = "Have whoever is sending you files scan the QR code above, or send them the link or the code.";
+                connectionBody.appendChild(p);
+            }
+            if (event.data.toString().includes("new_file")) {
+                saving = true;
+                fileName = event.data.replace("new_file ", "");
+
+                transferProgress.hidden = false;
+                document.getElementById("t-file-name").innerHTML = fileName;
+                document.getElementById("progress-bar").style.width = "0%";
+            }
+        }
+
+    });
+</script>
+</body>
+</html>

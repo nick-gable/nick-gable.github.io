@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link
+        href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900,900i&amp;display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>WFT - Select an Option</title>
+</head>
+
+<body class="bg-light">
+    <div class="container mt-5">
+        <h1 class="d-xl-none">WebSocket File Transfer - Select an Option</h1>
+        <div class="row">
+            <div class="col-lg">
+                <div class="card">
+                    <div class="card-header">
+                        Receive Files
+                    </div>
+                    <div class="card-body">
+                        <a href="recv.html" class='btn btn-success'>Go</a>
+                    </div>
+                </div>
+                <br />
+                <div class="card">
+                    <div class="card-header">Send Files</div>
+                    <div class="card-body">
+                        <p>
+                            Make sure the device you are sending to is setup to recieve and has provided you with an ID in the form XXXX-XXXX-XXXX-XXXX.
+                        </p>
+                        <input class="form-control" type="text" id="ID" placeholder="Enter ID" />
+                        <button class="btn btn-success mt-3" id="go-send">Go</button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg" id="right">
+                <h1 class="text-right d-none d-xl-block">WebSocket File Transfer - Select an Option</h1>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    document.getElementById('go-send').onclick = () => {
+        window.location.href = 'send.html?code=' + document.getElementById('ID').value;
+    }
+</script>
+</html>

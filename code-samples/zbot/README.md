@@ -1,0 +1,2 @@
+# Zillow Bot Source Code Sample
+`index.html` contains an example of the interface used for the Zillow Bot (with the JS callback code removed), and `zapi.js` and `addressSearch.js` contain the code used, respectively, to access the Zillow API to find Zestimates, and a search algorithm used to try to match addresses when results returned from the Zillow API differed in formatting.
