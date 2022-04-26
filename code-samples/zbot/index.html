@@ -37,21 +37,19 @@
                 </ul>
                 <a href="/api/auth/logout" class="btn btn-primary mt-3 mb-3">Logout</a>
                 <!-- Templates for status items -->
-                <li class="list-group-item" id="template-incomplete" hidden>
-                    <b>Name: </b> {F}.xlsx<br />
+                <li class="list-group-item" id="template-incomplete">
+                    <b>Name: </b> File1.xlsx<br />
                     <div class="progress bg-dark" style="height: 17px">
-                        <div class="progress-bar" style="width: 0%">{C} / {T} properties searched</div>
+                        <div class="progress-bar" style="width: 50%">10 / 20 properties searched</div>
                     </div>
                 </li>
-                <li class="list-group-item" id="template-complete" hidden>
-                    <b>Name: </b> {F}.xlsx<br />
+                <li class="list-group-item" id="template-complete">
+                    <b>Name: </b> File2.xlsx<br />
                     <div class="progress bg-dark" style="height: 17px">
-                        <div class="progress-bar bg-success" style="width: 100%">{T} / {T} properties searched</div>
+                        <div class="progress-bar bg-success" style="width: 100%">50 / 50 properties searched</div>
                     </div>
         
                     <a class="btn btn-success mt-2 mr-2" href="/api/zbot/download?filename=">Download File</a>
-                    <img src="/images/Zillow_Wordmark_Blue_RGB lrg.png" alt="Real Estate on Zillow" style="height: 20px"
-                        class="mt-2" />
                 </li>
             </div>
             <div class="col-md mb-5">
