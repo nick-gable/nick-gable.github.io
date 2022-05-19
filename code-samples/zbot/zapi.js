@@ -2,7 +2,7 @@ const got = require('got');
 const addressSearch = require('./addressSearch');
 
 const requestUrl = "https://api.bridgedataoutput.com/api/v2/zestimates?access_token={T}&limit={L}&near={A}";
-const accessToken = "a28cc8ddb645628094d2c25ec56a7f13";
+const accessToken = "AAAAAAAAAAAAAAAAAAAAAAAAAA"; // removed to protect company privacy
 
 function getZestimate(address, limit, callback) { // For this to work, format address as HN ST CITY STATE ZIP
     (async () => {
