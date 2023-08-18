@@ -2,7 +2,7 @@
     /*background-color: #992164;*/
     /* background-color: #4c247e; */
     /*background-color: #3700B3;*/
-    /* background-color: darkslategray; */
+    background-color: darkslategray;
 }
 
 .bg-tile {
@@ -13,25 +13,25 @@
     /*background-color: #6200EE;*/
 }
 
-/* a:not(.btn),
+a:not(.btn),
 a:hover:not(.btn) {
     color: white;
     text-decoration: underline;
     text-decoration-color: white;
-} */
-
-
-/* p, a {
-    font-size: 13pt;
-    font-weight: 400;
-} */
-
-h3 {
-    font-size: 24px;
-    font-weight: 300;
 }
 
-.contents {
-    position: sticky;
-    top: 0;
+h1,
+h2,
+h3,
+h4,
+h5,
+p,
+div {
+    color: white;
+}
+
+
+.half-lead {
+    font-size: 13pt;
+    font-weight: 200;
 }
