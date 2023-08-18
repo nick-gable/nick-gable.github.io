@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link
+        href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900,900i&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+    <title>Nick Gable - Project Portfolio</title>
+</head>
+
+<body class="bg-main">
+    <main role="main" class="container mt-5">
+        <div class="bg-tile pt-3 pb-3 pl-3 pr-3">
+            <h1>Nick Gable's Projects</h1>
+            <p class="lead">Hello! My name is Nick Gable, and I am currently studying Computer Science at the University
+                of Minnesota. On this page I've organized a variety of my personal and school projects.
+            <p class="lead"><i>Note: Some projects will have some or all of their source code removed to prevent
+                    plagerism, protect intellectual property, or to hide sensitive parts of code that could impact the
+                    security of the project/software in question.</i></p>
+        </div>
+
+        <!-- Not including this section, for now
+        <div class="bg-tile mt-4 pt-3 pb-3 pl-3 pr-3">
+            <h2>Resume</h2>
+            <div class="row">
+                <div class="col-9">
+                    <p class="half-lead">I render my resume in HTML, which I then print from my web browser using
+                        Chrome's
+                        default printing functionality. This makes it easier to keep the style consistent when changing
+                        the content, and also allows me to implement small HTML/JS controls to dynamically change the
+                        content of my resume in order to visualize changes or tailor it to different applications.</p>
+                    <p class="half-lead">My resume source code, written using Bootstrap as well as some pure CSS, is
+                        available, as well as a PDF of my latest version.</p>
+                </div>
+                <div class="col">
+                    <a href="#" class="btn btn-danger">Download PDF</a>
+                    <a href="#" class="btn btn-danger mt-2">View Source Code</a>
+                </div>
+            </div>
+        </div>-->
+
+        <div class="bg-tile mt-4 pt-3 pb-3 pl-3 pr-3">
+            <h2>Work / Contracted Projects</h2>
+            <p class="lead">This includes projects and jobs I've been paid to do by personal contacts, mostly for
+                businesses they own or manage.</p>
+            <div class="row">
+                <div class="col-md-7">
+                    <h3>Services / Software</h3>
+                    <h4>Zillow Bot</h4>
+                    <p class="half-lead">Automated web service used to retrieve Zillow home valuation data en-masse
+                        using the Zillow API. The service allows (private) users to upload loan tapes in a particularly
+                        formatted excel spreadsheet, which it then parsed in order to get a list of properties before
+                        searching for those properties on the API, retrieving their Zestimate when possible, and putting
+                        that data back into the spreadsheet. All of this was done using a web frontend which made
+                        asynchronous callbacks to a Node.js web server which did most of the processing.</p>
+                    <p class="half-lead"><i>Much of this source code is private to protect the interests of the company
+                            I made the bot for, but the Zillow API accessing code is available, as well as an example of
+                            the front-end interface in action.</i></p>
+                    <a href="https://github.com/nick-gable/nick-gable.github.io/tree/master/code-samples/zbot" target="_blank" class="btn btn-light">Zillow bot code sample</a>
+                    <a href="code-samples/zbot/index.html" class="btn btn-light mr-2" target="_blank">Example Interface (non functional)</a>
+                </div>
+                <div class="col-md">
+                    <h3>Web Design</h3>
+                    <p class="lead">
+                        <a href="http://mitlyng.com/" target="_blank">mitlyng.com</a>: Designed entire website and
+                        content from rudimentary template
+                    </p>
+                    <p class="lead">
+                        <a href="https://condascapital.com" target="_blank">condascapital.com</a>: Changed some
+                        formatting and icons from original template, and updated content
+                    </p>
+                    <p class="lead">
+                        <a href="http://shyrock.com" target="_blank">shyrock.com</a>: Minor template content and
+                        formatting changes (mostly removing unnecessary sections)
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-tile mt-4 pt-3 pb-3 pl-3 pr-3">
+            <h2>Notable School Projects</h2>
+            <p class="lead"><i>I haven't included source code for most items here due to the ease at which it could be
+                    found and plagiarized by other students, and because of the IP confusion that comes from code
+                    written for a university.</i></p>
+            <h4>Multithreaded Web Server</h4>
+            <p class="half-lead">For this project, I (along with another student), implemented a multithreaded web
+                server
+                in C. The web server uses POSIX threads, and directly accesses the Unix socket system call interface to
+                respond to HTTP GET requests, utilizing and pool of dispatcher threads to process the request and a pool
+                of worker threads to respond to the request with the appropriate file data. It also includes an
+                implementation for a basic cache, as well as a dynamic thread pool system that adjusts the number of
+                worker threads depending on the current server load.</p>
+            <h4>Rank Aggregator</h4>
+            <p class="half-lead">
+                For a functional programming class, I implemented a rank aggregation program, which parsed files of
+                votes and ballot options in order to determine the results of "elections" / votes, based off of a
+                formula provided in the file, parsing that formula string, applying it to every vote,
+                and checking for errors as appropriate.
+            </p>
+        </div>
+
+        <div class="bg-tile mt-4 mb-5 pt-3 pb-3 pl-3 pr-3">
+            <h2>Personal Projects</h2>
+            <h4>WebSocket File Transfer</h4>
+            <p class="half-lead">Online P2P file transfer system that I made, which uses WebSockets to transfer files
+                from a sending end to a receiving end. This is done by having the receiving end start the site, and the
+                sending end can then scan a QR code to connect to the receiver, or enter a text code into the site. I
+                made this in order to facilitate an easy way to send files from my phone to my computer, without needing
+                to find a cable or spend the time to login to a service like Google Drive on both devices. The server
+                for this is written in Python, and the web interface in HTML/JS with Bootstrap styling.</p>
+            <p class="half-lead"><i>Unfortunately, the server that hosted this service is currently down, but the source
+                    code is available!</i></p>
+            <a target="_blank" href="https://github.com/nick-gable/nick-gable.github.io/tree/master/code-samples/wft" class="btn btn-light">Source Code</a>
+        </div>
+
+    </main>
+</body>
+
+</html>

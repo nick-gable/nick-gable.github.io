@@ -1,0 +1,22 @@
+body {
+    background-color: darkslategray;
+    color: white;
+}
+
+.list-group-item {
+    background-color: darkslateblue;
+    border-radius: 15px;
+    margin-bottom: 5px;
+}
+
+.bg-not-started {
+    background-color: slategray;
+}
+
+.bg-in-progress {
+    background-color: darkslateblue;
+}
+
+.editor-toolbar {
+    background-color: white;
+}

@@ -1,0 +1,8 @@
+[Unit]
+Description=Work Task Scheduler web backend
+
+[Service]
+ExecStart=/bin/bash /home/nicholas/Documents/Misc/work_scheduler/run_server.sh
+
+[Install]
+WantedBy=multi-user.target
