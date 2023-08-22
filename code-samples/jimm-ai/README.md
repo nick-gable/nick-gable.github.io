@@ -1,5 +1,5 @@
 # JimmAI - Jimmy's Game AI
-Hello! This is my Jimmy's Game AI repository, stripped of school content. My documentation here isn't exhaustive, but you should find that every file is (generally) very well documented. 
+Hello! This is my Jimmy's Game AI repository, stripped of school content. My documentation in this README isn't exhaustive, but you should find that every file is (generally) very well documented. 
 
 At a high level, the Python modules `environment`, `naive`, and `advanced` contain most of the important Python code for simulating the game environment. The `mcts` directory contains the rust library that powers the MCTS computations, which are done when there are only two players remaining. The remaining Python modules are used for testing, analyzing, and generating results that were used for the paper. Check them out if you want!
 
