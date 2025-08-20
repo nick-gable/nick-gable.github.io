@@ -1,0 +1,2 @@
+# Registration Scanner - Code Sample
+Because this program was custom designed for Source MN's food shelf, I don't want to include the full source code here, protecting them from too much publicly available information about their technology systems. Thus, I have included simply the parsing script, which contains much of the logic for calling the Google Cloud API, and cleaning up the results.
